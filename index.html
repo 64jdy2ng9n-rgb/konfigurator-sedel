@@ -21,53 +21,374 @@ main{max-width:760px;margin:0 auto;padding:24px 18px}.hero{margin-bottom:20px}.h
 <header class="top"><div class="brand"><div class="brandmarks"><div class="logo">IKONIC</div><div class="x">×</div><div class="logo">FONTANELLA SEDLA</div></div></div></header>
 <main>
 <div class="hero"><h1>Konfigurace sedla</h1><p>Vyplň údaje zákazníka a specifikaci sedla. Z výsledku vznikne PDF s hlavičkou a zápatím.</p></div>
+
 <section class="section"><h2>Zákazník</h2><div class="grid">
 <div class="field"><label for="customer">Jméno zákazníka</label><input id="customer" placeholder="Jméno a příjmení"></div>
 <div class="field"><label for="date">Datum</label><input id="date" type="date"></div>
 <div class="field full"><label for="stable">Adresa stáje</label><div style="display:flex;gap:8px"><input id="stable" placeholder="Ulice, město, PSČ"><button id="locateStable" type="button" style="width:auto;white-space:nowrap;padding:12px 14px;background:var(--surface2);color:var(--text);border:1px solid var(--border);box-shadow:none">📍 Poloha</button></div><div id="locationStatus" class="note" style="margin-top:6px"></div></div>
 </div></section>
+
 <section class="section"><h2>Konfigurace sedla</h2><div class="grid">
 <div class="field full"><label for="model">Model sedla</label><input id="model" placeholder="Vyplnit ručně"></div>
+
 <div class="field"><label for="seat">Velikost posedlí</label><select id="seat"><option value="">Vyberte</option><option>15"</option><option>15,5"</option><option>16"</option><option>16,5"</option><option>17"</option><option>17,5"</option><option>18"</option></select></div>
+
 <div class="field"><label for="seatType">Druh posedlí</label><select id="seatType"><option>Totálně ploché</option><option>Extra ploché</option><option>Ploché</option><option>Polohluboké</option><option>Hluboké</option></select></div>
+
 <div class="field full"><label for="flap">Druh bočnice</label><select id="flap"><option>Standardní</option><option>Krátká</option><option>Dlouhá</option><option>Předsazená standardní</option><option>Předsazená dlouhá</option><option>Předsazená krátká</option></select></div>
+
 <div class="field full"><label>Typ opěrek</label><div class="check"><span id="supportLabel">Pevné (Light modely +3.750,-)</span><label class="switch"><input id="velcro" type="checkbox"><span class="slider"></span></label></div></div>
+
 <div class="field"><label for="knee">Kolenní opěrka</label><select id="knee"><option>Žádná</option><option>Malá</option><option>Střední</option><option>Velká</option></select></div>
+
 <div class="field"><label for="calf">Lýtková opěrka</label><select id="calf"><option>Žádná</option><option>Malá</option><option>Střední</option><option>Velká</option></select></div>
+
 <div class="field full"><label for="panels">Polštáře</label><select id="panels"><option>Sock Flex</option><option>Wool Sense (+3.000,-)</option><option>Wool Sense Light (+6.250,-)</option><option>Felt Fit (+5.000,-, Felt Fit nelze pro Light)</option><option>Sock Flex 2dílný (+2.375,-)</option><option>Sock Flex 2dílný Light (+3.750,-)</option><option>Wool Sense 2dílný (+3.000,-)</option><option>Wool Sense 2dílný Light (+6.250,-)</option><option>Felt Fit 2dílný (+5.000,-, Felt Fit nelze pro Light)</option></select></div>
+
 <div class="field"><label for="panelHeight">Výška polštářů</label><select id="panelHeight"><option>Standardní</option><option>Vysoký</option><option>Nízký (nelze pro Felix)</option></select></div>
+
 <div class="field"><label>Shoulder cut</label><div class="check"><span id="shoulderLabel">Bez</span><label class="switch"><input id="shoulder" type="checkbox"><span class="slider"></span></label></div></div>
+
 <div class="field full"><label for="gullet">Přední rozsocha</label><select id="gullet"><option>XN</option><option>N</option><option>MN</option><option>M</option><option>MW</option><option>W</option><option>XW</option><option>2XW</option></select></div>
+
 <div class="field full"><label>4. zápinka</label><div class="check"><span>Aktivovat 4. zápinku (+3.750,-)</span><label class="switch"><input id="fourthGirth" type="checkbox"><span class="slider"></span></label></div></div>
+
 <div class="field"><label for="saddleColor">Barva sedla</label><select id="saddleColor"><option>Černá</option><option>Havana</option><option>Cognac</option><option>Oříšková</option></select></div>
+
 <div class="field"><label for="detailColor">Barva detailu</label><select id="detailColor"><option>Lesklá černá</option><option>Lesklá hnědá</option><option>Zelená</option><option>Fuchsia</option><option>V barvě</option><option>Ikonic modrá</option><option>Tmavě modrá</option><option>Šedá</option><option>Červená</option><option>Kamínky (+3.750,-)</option><option>Stříbrná (Elite)</option></select></div>
+
 <div class="field full"><label>Barva šití</label><div class="check"><span id="stitchLabel">V barvě</span><label class="switch"><input id="stitch" type="checkbox"><span class="slider"></span></label></div></div>
+
 <div class="field full"><label>Materiál polštáře u Light</label><div class="check"><span>Aktivovat volbu materiálu</span><label class="switch"><input id="lightPanelMaterialEnabled" type="checkbox"><span class="slider"></span></label></div><div id="lightPanelMaterialChoice" class="check" style="display:none;margin-top:8px"><span id="lightPanelMaterialLabel">Standardní</span><label class="switch"><input id="lightPanelMaterial" type="checkbox"><span class="slider"></span></label></div></div>
+
 <div class="field full"><label for="note">Poznámka</label><textarea id="note" placeholder="Poznámka k zákazníkovi nebo konfiguraci"></textarea></div>
 </div></section>
+
 <div class="actions"><button id="makePdf">Vytvořit PDF</button><div class="note">PDF se vytvoří přímo v zařízení. Po vytvoření ho můžete stáhnout nebo sdílet přes nabídku iPhonu.</div></div>
-</main></div>
-<div class="preview" id="preview"><div class="close"><button id="close">← Zpět na formulář</button></div><div class="pdfmock" id="pdfmock"></div><div class="pdfactions" style="max-width:760px;margin:0 auto;padding:0 18px 20px"><button id="downloadPdf">Stáhnout PDF</button><button id="sharePdf" class="secondary">Sdílet PDF</button></div></div>
+</main>
+</div>
+
+<div class="preview" id="preview">
+<div class="close"><button id="close">← Zpět na formulář</button></div>
+<div class="pdfmock" id="pdfmock"></div>
+<div class="pdfactions" style="max-width:760px;margin:0 auto;padding:0 18px 20px">
+<button id="downloadPdf">Stáhnout PDF</button>
+<button id="sharePdf" class="secondary">Sdílet PDF</button>
+</div>
+</div>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
 <script>
-const $=id=>document.getElementById(id); const val=id=>$(id).value; const checked=id=>$(id).checked;
-const today=new Date(); $('date').value=today.toISOString().slice(0,10);
+const $=id=>document.getElementById(id);
+const val=id=>$(id).value;
+const checked=id=>$(id).checked;
+
+const today=new Date();
+$('date').value=today.toISOString().slice(0,10);
+
 $('velcro').addEventListener('change',()=>$('supportLabel').textContent=checked('velcro')?'Velcro':'Pevné (Light modely +3.750,-)');
+
 $('shoulder').addEventListener('change',()=>$('shoulderLabel').textContent=checked('shoulder')?'S':'Bez');
+
 $('stitch').addEventListener('change',()=>$('stitchLabel').textContent=checked('stitch')?'Béžová':'V barvě');
+
 $('lightPanelMaterial').addEventListener('change',()=>$('lightPanelMaterialLabel').textContent=checked('lightPanelMaterial')?'Mesh':'Standardní');
-$('lightPanelMaterialEnabled').addEventListener('change',()=>{$('lightPanelMaterialChoice').style.display=checked('lightPanelMaterialEnabled')?'flex':'none'});
-function reverseGeocode(lat,lon){return fetch('https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat='+lat+'&lon='+lon+'&accept-language=cs').then(r=>{if(!r.ok)throw new Error();return r.json()})}
-$('locateStable').onclick=()=>{const s=$('locationStatus');if(!navigator.geolocation){s.textContent='Toto zařízení nepodporuje zjištění polohy.';return}s.textContent='Zjišťuji polohu…';navigator.geolocation.getCurrentPosition(async p=>{try{const d=await reverseGeocode(p.coords.latitude,p.coords.longitude);$('stable').value=d.display_name||'';s.textContent='Adresa načtena podle polohy zařízení.'}catch(e){s.textContent='Polohu se podařilo zjistit, ale adresu se nepodařilo načíst.'}},()=>{s.textContent='Poloha nebyla povolena. Povolte přístup k poloze pro tento web.'},{enableHighAccuracy:true,timeout:10000,maximumAge:60000})};
-function row(label,value){return `<div class="pdfrow"><strong>${label}</strong><span>${value||'<span class="empty">Neuvedeno</span>'}</span></div>`}
-$('makePdf').onclick=()=>{const data=[['Jméno zákazníka',val('customer')],['Datum',val('date')],['Adresa stáje',val('stable')],['Model sedla',val('model')],['Velikost posedlí',val('seat')],['Druh posedlí',val('seatType')],['Druh bočnice',val('flap')],['Typ opěrek',checked('velcro')?'Velcro':'Pevné'],['Kolenní opěrka',val('knee')],['Lýtková opěrka',val('calf')],['Polštáře',val('panels')],['Výška polštářů',val('panelHeight')],['Shoulder cut',checked('shoulder')?'S':'Bez'],['Přední rozsocha',val('gullet')],['4. zápinka',checked('fourthGirth')?'Ano':'Ne'],['Barva sedla',val('saddleColor')],['Barva detailu',val('detailColor')],['Barva šití',checked('stitch')?'Béžová':'V barvě'],['Poznámka',val('note')]]; if(checked('lightPanelMaterialEnabled'))data.push(['Materiál polštáře u Light',checked('lightPanelMaterial')?'Mesh':'Standardní']); const customerData=data.slice(0,3).map(x=>row(x[0],x[1])).join(''); const configData=data.slice(3).map(x=>row(x[0],x[1])).join(''); $('pdfmock').innerHTML=`<div class="pdfhead"><div class="pdfmark">FONTANELLA SEDLA</div><div style="text-align:right"><small>Konfigurace sedla</small></div></div><div class="pdfgrid pdfcustomer">${customerData}</div><div class="pdfdivider"></div><div class="pdfgrid">${configData}</div><div class="pdffoot"><div>Fontanella sedla s.r.o. · Janáčkovo nábřeží 474/45 · 150 00</div><div>IČ 19347171 · DIČ CZ19347171 · sedlovna@fontanellasedla.cz</div><div>775 335 662 · www.fontanellasedla.cz</div></div>`; $('preview').classList.add('open'); currentPdfBlob=null; window.scrollTo(0,0)};
+
+$('lightPanelMaterialEnabled').addEventListener('change',()=>$('lightPanelMaterialChoice').style.display=checked('lightPanelMaterialEnabled')?'flex':'none');
+
+function reverseGeocode(lat,lon){
+return fetch('https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat='+lat+'&lon='+lon+'&accept-language=cs')
+.then(r=>{if(!r.ok)throw new Error();return r.json()})
+}
+
+$('locateStable').onclick=()=>{
+const s=$('locationStatus');
+
+if(!navigator.geolocation){
+s.textContent='Toto zařízení nepodporuje zjištění polohy.';
+return
+}
+
+s.textContent='Zjišťuji polohu…';
+
+navigator.geolocation.getCurrentPosition(async p=>{
+try{
+const d=await reverseGeocode(p.coords.latitude,p.coords.longitude);
+$('stable').value=d.display_name||'';
+s.textContent='Adresa načtena podle polohy zařízení.'
+}catch(e){
+s.textContent='Polohu se podařilo zjistit, ale adresu se nepodařilo načíst.'
+}
+},()=>{
+s.textContent='Poloha nebyla povolena. Povolte přístup k poloze pro tento web.'
+},{
+enableHighAccuracy:true,
+timeout:10000,
+maximumAge:60000
+})
+};
+
+function row(label,value){
+return `<div class="pdfrow"><strong>${label}</strong><span>${value||'<span class="empty">Neuvedeno</span>'}</span></div>`
+}
+
+$('makePdf').onclick=()=>{
+const data=[
+['Jméno zákazníka',val('customer')],
+['Datum',val('date')],
+['Adresa stáje',val('stable')],
+['Model sedla',val('model')],
+['Velikost posedlí',val('seat')],
+['Druh posedlí',val('seatType')],
+['Druh bočnice',val('flap')],
+['Typ opěrek',checked('velcro')?'Velcro':'Pevné'],
+['Kolenní opěrka',val('knee')],
+['Lýtková opěrka',val('calf')],
+['Polštáře',val('panels')],
+['Výška polštářů',val('panelHeight')],
+['Shoulder cut',checked('shoulder')?'S':'Bez'],
+['Přední rozsocha',val('gullet')],
+['4. zápinka',checked('fourthGirth')?'Ano':'Ne'],
+['Barva sedla',val('saddleColor')],
+['Barva detailu',val('detailColor')],
+['Barva šití',checked('stitch')?'Béžová':'V barvě'],
+['Poznámka',val('note')]
+];
+
+if(checked('lightPanelMaterialEnabled')){
+data.push([
+'Materiál polštáře u Light',
+checked('lightPanelMaterial')?'Mesh':'Standardní'
+])
+}
+
+const customerData=data.slice(0,3).map(x=>row(x[0],x[1])).join('');
+const configData=data.slice(3).map(x=>row(x[0],x[1])).join('');
+
+$('pdfmock').innerHTML=`
+<div class="pdfhead">
+<div class="pdfmark">FONTANELLA SEDLA</div>
+<div style="text-align:right"><small>Konfigurace sedla</small></div>
+</div>
+
+<div class="pdfgrid pdfcustomer">${customerData}</div>
+
+<div class="pdfdivider"></div>
+
+<div class="pdfgrid">${configData}</div>
+
+<div class="pdffoot">
+<div>Fontanella sedla s.r.o. · Janáčkovo nábřeží 474/45 · 150 00</div>
+<div>IČ 19347171 · DIČ CZ19347171 · sedlovna@fontanellasedla.cz</div>
+<div>775 335 662 · www.fontanellasedla.cz</div>
+</div>
+`;
+
+$('preview').classList.add('open');
+currentPdfBlob=null;
+window.scrollTo(0,0)
+};
+
 $('close').onclick=()=>$('preview').classList.remove('open');
+
 let currentPdfBlob=null;
-async function buildPdf(){if(!window.html2canvas||!window.jspdf)throw new Error('PDF knihovny nejsou načtené.');const target=$('pdfmock');const canvas=await html2canvas(target,{scale:2,backgroundColor:'#ffffff',useCORS:true,imageTimeout:10000});const {jsPDF}=window.jspdf;const pdf=new jsPDF({orientation:'portrait',unit:'mm',format:'a4',compress:true});const pageW=210,pageH=297,margin=8,maxW=pageW-margin*2,maxH=pageH-margin*2,ratio=canvas.width/canvas.height;let imgW=maxW,imgH=imgW/ratio;if(imgH<=maxH){const x=(pageW-imgW)/2,y=(pageH-imgH)/2;pdf.addImage(canvas.toDataURL('image/jpeg',0.92),'JPEG',x,y,imgW,imgH)}else{const pagePxH=Math.floor(canvas.height*(maxH/imgH));let offset=0;while(offset<canvas.height){const sliceH=Math.min(pagePxH,canvas.height-offset);const pageCanvas=document.createElement('canvas');pageCanvas.width=canvas.width;pageCanvas.height=sliceH;pageCanvas.getContext('2d').drawImage(canvas,0,offset,canvas.width,sliceH,0,0,canvas.width,sliceH);const sliceRatio=pageCanvas.width/pageCanvas.height;let w=maxW,h=w/sliceRatio;if(h>maxH){h=maxH;w=h*sliceRatio}if(offset>0)pdf.addPage();const x=(pageW-w)/2,y=(pageH-h)/2;pdf.addImage(pageCanvas.toDataURL('image/jpeg',0.92),'JPEG',x,y,w,h);offset+=sliceH}}currentPdfBlob=pdf.output('blob');return currentPdfBlob}
-async function ensurePdf(){if(currentPdfBlob)return currentPdfBlob;return buildPdf()}
-$('downloadPdf').onclick=async()=>{try{const blob=await ensurePdf();const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='konfigurace-sedla.pdf';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2000)}catch(e){alert('PDF se nepodařilo vytvořit. Zkontrolujte připojení k internetu a zkuste to znovu.')}};
-$('sharePdf').onclick=async()=>{try{const blob=await ensurePdf();const file=new File([blob],'konfigurace-sedla.pdf',{type:'application/pdf'});if(navigator.share&&(!navigator.canShare||navigator.canShare({files:[file]}))){await navigator.share({title:'Konfigurace sedla',text:'Konfigurace sedla',files:[file]})}else{const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='konfigurace-sedla.pdf';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2000);alert('Přímé sdílení souboru není na tomto zařízení dostupné. PDF bylo staženo.')}}catch(e){if(e.name!=='AbortError')alert('Sdílení PDF se nepodařilo dokončit.')}};
+
+function pdfFileName(){
+const name=val('customer')
+.trim()
+.normalize('NFD')
+.replace(/[\u0300-\u036f]/g,'')
+.replace(/[^a-zA-Z0-9]+/g,'_')
+.replace(/^_+|_+$/g,'');
+
+return (name||'konfigurace')+'_konfsedlo.pdf'
+}
+
+async function buildPdf(){
+if(!window.html2canvas||!window.jspdf)
+throw new Error('PDF knihovny nejsou načtené.');
+
+const target=$('pdfmock');
+
+const canvas=await html2canvas(target,{
+scale:2,
+backgroundColor:'#ffffff',
+useCORS:true,
+imageTimeout:10000
+});
+
+const {jsPDF}=window.jspdf;
+
+const pdf=new jsPDF({
+orientation:'portrait',
+unit:'mm',
+format:'a4',
+compress:true
+});
+
+const pageW=210;
+const pageH=297;
+const margin=8;
+const maxW=pageW-margin*2;
+const maxH=pageH-margin*2;
+const ratio=canvas.width/canvas.height;
+
+let imgW=maxW;
+let imgH=imgW/ratio;
+
+if(imgH<=maxH){
+
+const x=(pageW-imgW)/2;
+const y=(pageH-imgH)/2;
+
+pdf.addImage(
+canvas.toDataURL('image/jpeg',0.92),
+'JPEG',
+x,
+y,
+imgW,
+imgH
+)
+
+}else{
+
+const pagePxH=Math.floor(canvas.height*(maxH/imgH));
+let offset=0;
+
+while(offset<canvas.height){
+
+const sliceH=Math.min(pagePxH,canvas.height-offset);
+
+const pageCanvas=document.createElement('canvas');
+
+pageCanvas.width=canvas.width;
+pageCanvas.height=sliceH;
+
+pageCanvas
+.getContext('2d')
+.drawImage(
+canvas,
+0,
+offset,
+canvas.width,
+sliceH,
+0,
+0,
+canvas.width,
+sliceH
+);
+
+const sliceRatio=pageCanvas.width/pageCanvas.height;
+
+let w=maxW;
+let h=w/sliceRatio;
+
+if(h>maxH){
+h=maxH;
+w=h*sliceRatio
+}
+
+if(offset>0)
+pdf.addPage();
+
+const x=(pageW-w)/2;
+const y=(pageH-h)/2;
+
+pdf.addImage(
+pageCanvas.toDataURL('image/jpeg',0.92),
+'JPEG',
+x,
+y,
+w,
+h
+);
+
+offset+=sliceH
+}
+}
+
+currentPdfBlob=pdf.output('blob');
+
+return currentPdfBlob
+}
+
+async function ensurePdf(){
+if(currentPdfBlob)
+return currentPdfBlob;
+
+return buildPdf()
+}
+
+$('downloadPdf').onclick=async()=>{
+try{
+const blob=await ensurePdf();
+
+const url=URL.createObjectURL(blob);
+
+const a=document.createElement('a');
+
+a.href=url;
+a.download=pdfFileName();
+
+document.body.appendChild(a);
+a.click();
+a.remove();
+
+setTimeout(()=>URL.revokeObjectURL(url),2000)
+
+}catch(e){
+alert('PDF se nepodařilo vytvořit. Zkontrolujte připojení k internetu a zkuste to znovu.')
+}
+};
+
+$('sharePdf').onclick=async()=>{
+try{
+
+const blob=await ensurePdf();
+
+const file=new File(
+[blob],
+pdfFileName(),
+{type:'application/pdf'}
+);
+
+if(
+navigator.share&&
+(!navigator.canShare||navigator.canShare({files:[file]}))
+){
+
+await navigator.share({
+title:'Konfigurace sedla',
+text:'Konfigurace sedla',
+files:[file]
+})
+
+}else{
+
+const url=URL.createObjectURL(blob);
+
+const a=document.createElement('a');
+
+a.href=url;
+a.download=pdfFileName();
+
+document.body.appendChild(a);
+a.click();
+a.remove();
+
+setTimeout(()=>URL.revokeObjectURL(url),2000);
+
+alert('Přímé sdílení souboru není na tomto zařízení dostupné. PDF bylo staženo.')
+}
+
+}catch(e){
+
+if(e.name!=='AbortError')
+alert('Sdílení PDF se nepodařilo dokončit.')
+}
+};
 </script>
 </body>
 </html>
