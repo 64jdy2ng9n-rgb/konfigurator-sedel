@@ -25,6 +25,10 @@ main{max-width:760px;margin:0 auto;padding:24px 18px}.hero{margin-bottom:20px}.h
 <section class="section"><h2>Zákazník</h2><div class="grid">
 <div class="field"><label for="customer">Jméno zákazníka</label><input id="customer" placeholder="Jméno a příjmení"></div>
 <div class="field"><label for="date">Datum</label><input id="date" type="date"></div>
+
+<div class="field"><label for="phone">Telefon</label><input id="phone" type="tel" placeholder="Telefon zákazníka"></div>
+<div class="field"><label for="email">E-mail</label><input id="email" type="email" placeholder="E-mail zákazníka"></div>
+
 <div class="field full"><label for="stable">Adresa stáje</label><div style="display:flex;gap:8px"><input id="stable" placeholder="Ulice, město, PSČ"><button id="locateStable" type="button" style="width:auto;white-space:nowrap;padding:12px 14px;background:var(--surface2);color:var(--text);border:1px solid var(--border);box-shadow:none">📍 Poloha</button></div><div id="locationStatus" class="note" style="margin-top:6px"></div></div>
 </div></section>
 
@@ -65,8 +69,7 @@ main{max-width:760px;margin:0 auto;padding:24px 18px}.hero{margin-bottom:20px}.h
 </div></section>
 
 <div class="actions"><button id="makePdf">Vytvořit PDF</button><div class="note">PDF se vytvoří přímo v zařízení. Po vytvoření ho můžete stáhnout nebo sdílet přes nabídku iPhonu.</div></div>
-</main>
-</div>
+</main></div>
 
 <div class="preview" id="preview">
 <div class="close"><button id="close">← Zpět na formulář</button></div>
@@ -138,6 +141,8 @@ $('makePdf').onclick=()=>{
 const data=[
 ['Jméno zákazníka',val('customer')],
 ['Datum',val('date')],
+['Telefon',val('phone')],
+['E-mail',val('email')],
 ['Adresa stáje',val('stable')],
 ['Model sedla',val('model')],
 ['Velikost posedlí',val('seat')],
@@ -164,8 +169,8 @@ checked('lightPanelMaterial')?'Mesh':'Standardní'
 ])
 }
 
-const customerData=data.slice(0,3).map(x=>row(x[0],x[1])).join('');
-const configData=data.slice(3).map(x=>row(x[0],x[1])).join('');
+const customerData=data.slice(0,5).map(x=>row(x[0],x[1])).join('');
+const configData=data.slice(5).map(x=>row(x[0],x[1])).join('');
 
 $('pdfmock').innerHTML=`
 <div class="pdfhead">
