@@ -24,6 +24,21 @@ main{max-width:760px;margin:0 auto;padding:24px 18px}.hero{margin-bottom:20px}.h
 .pdfpage .pdfprice .price-line{padding:6px 0}
 .pdfpage .pdffoot{margin-top:18px}
 
+
+/* Jednostránková A4: kompaktní typografie a úsporné mezery. */
+.pdfpage-single{position:relative;padding:26px 34px;overflow:hidden}
+.pdfpage-single .pdfpage-content{width:100%;transform-origin:top left}
+.pdfpage-single .pdfhead{padding-bottom:10px;font-size:13px}
+.pdfpage-single .pdfgrid{margin-top:10px;column-gap:22px}
+.pdfpage-single .pdfcustomer{margin-bottom:2px}
+.pdfpage-single .pdfdivider{margin:10px 0 3px;height:1px}
+.pdfpage-single .pdfrow{padding:4px 0;min-width:0;break-inside:avoid;overflow-wrap:anywhere}
+.pdfpage-single .pdfrow strong{font-size:9px;margin-bottom:2px}
+.pdfpage-single .pdfrow span{font-size:12px;line-height:1.2}
+.pdfpage-single .pdfprice{margin-top:12px;padding-top:7px}
+.pdfpage-single .pdfprice .price-line{padding:4px 0;font-size:12px}
+.pdfpage-single .pdfprice .price-total{font-size:15px;margin-top:3px}
+.pdfpage-single .pdffoot{margin-top:12px;padding-top:7px;font-size:9px}
 </style>
 </head>
 <body>
@@ -222,15 +237,13 @@ checked('lightPanelMaterial')?'Mesh':'Standardní'
 }
 
 const customerData=data.slice(0,6).map(x=>row(x[0],x[1])).join('');
-// Pevný konec první strany za položkou Polštáře (index 13).
-const configPage1=data.slice(6,14).map(x=>row(x[0],x[1])).join('');
-const configPage2=data.slice(14).map(x=>row(x[0],x[1])).join('');
+// Kompaktní jednostránkový výstup A4 bez dělení řádků.
+const configData=data.slice(6).map(x=>row(x[0],x[1])).join('');
 const priceRows=`<div class="pdfprice"><strong>Cenová kalkulace</strong><div class="price-line"><span>Základní cena</span><strong>${pricing.base===null?'Neuvedeno':money(pricing.base)}</strong></div>${pricing.extras.map(([name,amount])=>`<div class="price-line"><span>${name}</span><strong>+ ${money(amount)}</strong></div>`).join('')}<div class="price-line price-total"><span>Předpokládaná cena</span><strong>${pricing.total===null?'Neuvedeno':money(pricing.total)}</strong></div></div>`;
 const pdfHeader=`<div class="pdfhead"><div class="pdfmark">FONTANELLA SEDLA</div><div style="text-align:right"><small>Konfigurace sedla</small></div></div>`;
 const pdfFooter=`<div class="pdffoot"><div>Fontanella sedla s.r.o. · Janáčkovo nábřeží 474/45 · 150 00</div><div>IČ 19347171 · DIČ CZ19347171 · sedlovna@fontanellasedla.cz</div><div>775 335 662 · www.fontanellasedla.cz</div></div>`;
 $('pdfmock').innerHTML=`
-<div class="pdfpage">${pdfHeader}<div class="pdfgrid pdfcustomer">${customerData}</div><div class="pdfdivider"></div><div class="pdfgrid">${configPage1}</div></div>
-<div class="pdfpage">${pdfHeader}<div class="pdfgrid">${configPage2}</div>${priceRows}${pdfFooter}</div>`;
+<div class="pdfpage pdfpage-single"><div class="pdfpage-content">${pdfHeader}<div class="pdfgrid pdfcustomer">${customerData}</div><div class="pdfdivider"></div><div class="pdfgrid">${configData}</div>${priceRows}${pdfFooter}</div></div>`;
 
 $('preview').classList.add('open');
 currentPdfBlob=null;
@@ -258,17 +271,21 @@ throw new Error('PDF knihovny nejsou načtené.');
 
 const {jsPDF}=window.jspdf;
 const pdf=new jsPDF({orientation:'portrait',unit:'mm',format:'a4',compress:true});
-const pages=[...document.querySelectorAll('#pdfmock .pdfpage')];
-// Každou stránku vykreslíme samostatně. Žádné řezání obrázku přes řádky.
-for(let i=0;i<pages.length;i++){
- const page=pages[i];
- if(page.scrollHeight>page.clientHeight+2){
-   throw new Error('Obsah strany '+(i+1)+' přesahuje A4.');
- }
- const canvas=await html2canvas(page,{scale:2,backgroundColor:'#ffffff',useCORS:true,imageTimeout:10000});
- if(i>0)pdf.addPage();
- pdf.addImage(canvas.toDataURL('image/jpeg',0.92),'JPEG',0,0,210,297);
-}
+const page=document.querySelector('#pdfmock .pdfpage');
+const content=page.querySelector('.pdfpage-content');
+// Před vykreslením se obsah přizpůsobí výšce A4 jako jeden celek.
+// Text a jednotlivé řádky se nikdy nerozříznou mezi stránky.
+content.style.transform='none';
+content.style.width='100%';
+await new Promise(resolve=>requestAnimationFrame(resolve));
+const availableHeight=page.clientHeight-52;
+const naturalHeight=content.scrollHeight;
+const factor=Math.min(1,availableHeight/naturalHeight);
+content.style.transformOrigin='top left';
+content.style.transform=`scale(${factor})`;
+content.style.width=`${100/factor}%`;
+const canvas=await html2canvas(page,{scale:2,backgroundColor:'#ffffff',useCORS:true,imageTimeout:10000});
+pdf.addImage(canvas.toDataURL('image/jpeg',0.94),'JPEG',0,0,210,297);
 
 currentPdfBlob=pdf.output('blob');
 
