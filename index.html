@@ -15,6 +15,15 @@ main{max-width:760px;margin:0 auto;padding:24px 18px}.hero{margin-bottom:20px}.h
 .actions{position:sticky;bottom:0;padding:14px 0 calc(14px + env(safe-area-inset-bottom));background:linear-gradient(transparent,var(--bg) 25%)}button{width:100%;border:0;border-radius:14px;background:var(--accent);color:white;font:inherit;font-weight:700;font-size:16px;padding:14px 18px;box-shadow:0 8px 24px color-mix(in srgb,var(--accent) 25%,transparent);cursor:pointer}button.secondary{margin-top:9px;background:var(--surface);color:var(--text);border:1px solid var(--border);box-shadow:none}.note{font-size:12px;color:var(--muted);line-height:1.5;margin-top:10px}.preview{display:none}.preview.open{display:block;position:fixed;inset:0;z-index:20;background:var(--bg);overflow:auto}.pdfmock{max-width:760px;margin:20px auto 120px;background:white;color:#191817;min-height:1040px;padding:34px 42px;box-shadow:0 12px 40px #0003}.pdfhead{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #222;padding-bottom:18px}.pdfgrid{display:grid;grid-template-columns:1fr 1fr;margin-top:28px}.pdfcustomer{margin-bottom:4px}.pdfdivider{height:2px;background:#222;margin:18px 0 4px}.pdfrow{padding:7px 0;border-bottom:1px solid #ddd}.pdfrow strong{display:block;font-size:10px;text-transform:uppercase;color:#777;margin-bottom:4px}.pdfrow span{font-size:13px}.pdffoot{margin-top:34px;padding-top:10px;border-top:1px solid #222;font-size:9px;line-height:1.5;color:#555}.close{max-width:760px;margin:0 auto;padding:18px}.close button{background:#191817}.empty{color:#999}
 @media(max-width:620px){.grid{grid-template-columns:1fr}.pdfmock{margin:10px 10px 110px;padding:28px 24px;min-height:900px}.brandmarks .logo{min-width:82px;height:30px}.hero h1{font-size:25px}}
 .price-line{display:flex;justify-content:space-between;gap:12px;align-items:baseline;padding:9px 0;border-bottom:1px solid var(--border);font-size:14px}.price-line strong{white-space:nowrap}.price-total{font-size:19px;font-weight:700;border-bottom:0;margin-top:8px}.pdfprice{margin-top:22px;border-top:2px solid #222;padding-top:10px}.pdfprice .price-line{border-color:#ddd}.pdfprice .price-total{font-size:18px}
+/* Náhled jednotlivých fyzických stran PDF */
+.pdfmock{background:transparent;box-shadow:none;padding:0;min-height:0;max-width:760px;overflow-x:auto}
+.pdfpage{background:#fff;color:#191817;width:760px;max-width:none;aspect-ratio:210/297;padding:5% 6%;margin-bottom:18px;box-shadow:0 12px 40px #0003;overflow:hidden}
+.pdfpage .pdfgrid{margin-top:18px}
+.pdfpage .pdfrow{break-inside:avoid;padding:6px 0;overflow-wrap:anywhere}
+.pdfpage .pdfprice{margin-top:14px}
+.pdfpage .pdfprice .price-line{padding:6px 0}
+.pdfpage .pdffoot{margin-top:18px}
+
 </style>
 </head>
 <body>
@@ -213,28 +222,15 @@ checked('lightPanelMaterial')?'Mesh':'Standardní'
 }
 
 const customerData=data.slice(0,6).map(x=>row(x[0],x[1])).join('');
-const configData=data.slice(6).map(x=>row(x[0],x[1])).join('');
+// Pevný konec první strany za položkou Polštáře (index 13).
+const configPage1=data.slice(6,14).map(x=>row(x[0],x[1])).join('');
+const configPage2=data.slice(14).map(x=>row(x[0],x[1])).join('');
 const priceRows=`<div class="pdfprice"><strong>Cenová kalkulace</strong><div class="price-line"><span>Základní cena</span><strong>${pricing.base===null?'Neuvedeno':money(pricing.base)}</strong></div>${pricing.extras.map(([name,amount])=>`<div class="price-line"><span>${name}</span><strong>+ ${money(amount)}</strong></div>`).join('')}<div class="price-line price-total"><span>Předpokládaná cena</span><strong>${pricing.total===null?'Neuvedeno':money(pricing.total)}</strong></div></div>`;
-
+const pdfHeader=`<div class="pdfhead"><div class="pdfmark">FONTANELLA SEDLA</div><div style="text-align:right"><small>Konfigurace sedla</small></div></div>`;
+const pdfFooter=`<div class="pdffoot"><div>Fontanella sedla s.r.o. · Janáčkovo nábřeží 474/45 · 150 00</div><div>IČ 19347171 · DIČ CZ19347171 · sedlovna@fontanellasedla.cz</div><div>775 335 662 · www.fontanellasedla.cz</div></div>`;
 $('pdfmock').innerHTML=`
-<div class="pdfhead">
-<div class="pdfmark">FONTANELLA SEDLA</div>
-<div style="text-align:right"><small>Konfigurace sedla</small></div>
-</div>
-
-<div class="pdfgrid pdfcustomer">${customerData}</div>
-
-<div class="pdfdivider"></div>
-
-<div class="pdfgrid">${configData}</div>
-${priceRows}
-
-<div class="pdffoot">
-<div>Fontanella sedla s.r.o. · Janáčkovo nábřeží 474/45 · 150 00</div>
-<div>IČ 19347171 · DIČ CZ19347171 · sedlovna@fontanellasedla.cz</div>
-<div>775 335 662 · www.fontanellasedla.cz</div>
-</div>
-`;
+<div class="pdfpage">${pdfHeader}<div class="pdfgrid pdfcustomer">${customerData}</div><div class="pdfdivider"></div><div class="pdfgrid">${configPage1}</div></div>
+<div class="pdfpage">${pdfHeader}<div class="pdfgrid">${configPage2}</div>${priceRows}${pdfFooter}</div>`;
 
 $('preview').classList.add('open');
 currentPdfBlob=null;
@@ -260,103 +256,18 @@ async function buildPdf(){
 if(!window.html2canvas||!window.jspdf)
 throw new Error('PDF knihovny nejsou načtené.');
 
-const target=$('pdfmock');
-
-const canvas=await html2canvas(target,{
-scale:2,
-backgroundColor:'#ffffff',
-useCORS:true,
-imageTimeout:10000
-});
-
 const {jsPDF}=window.jspdf;
-
-const pdf=new jsPDF({
-orientation:'portrait',
-unit:'mm',
-format:'a4',
-compress:true
-});
-
-const pageW=210;
-const pageH=297;
-const margin=8;
-const maxW=pageW-margin*2;
-const maxH=pageH-margin*2;
-const ratio=canvas.width/canvas.height;
-
-let imgW=maxW;
-let imgH=imgW/ratio;
-
-if(imgH<=maxH){
-
-const x=(pageW-imgW)/2;
-const y=(pageH-imgH)/2;
-
-pdf.addImage(
-canvas.toDataURL('image/jpeg',0.92),
-'JPEG',
-x,
-y,
-imgW,
-imgH
-)
-
-}else{
-
-const pagePxH=Math.floor(canvas.height*(maxH/imgH));
-let offset=0;
-
-while(offset<canvas.height){
-
-const sliceH=Math.min(pagePxH,canvas.height-offset);
-
-const pageCanvas=document.createElement('canvas');
-
-pageCanvas.width=canvas.width;
-pageCanvas.height=sliceH;
-
-pageCanvas
-.getContext('2d')
-.drawImage(
-canvas,
-0,
-offset,
-canvas.width,
-sliceH,
-0,
-0,
-canvas.width,
-sliceH
-);
-
-const sliceRatio=pageCanvas.width/pageCanvas.height;
-
-let w=maxW;
-let h=w/sliceRatio;
-
-if(h>maxH){
-h=maxH;
-w=h*sliceRatio
-}
-
-if(offset>0)
-pdf.addPage();
-
-const x=(pageW-w)/2;
-const y=(pageH-h)/2;
-
-pdf.addImage(
-pageCanvas.toDataURL('image/jpeg',0.92),
-'JPEG',
-x,
-y,
-w,
-h
-);
-
-offset+=sliceH
-}
+const pdf=new jsPDF({orientation:'portrait',unit:'mm',format:'a4',compress:true});
+const pages=[...document.querySelectorAll('#pdfmock .pdfpage')];
+// Každou stránku vykreslíme samostatně. Žádné řezání obrázku přes řádky.
+for(let i=0;i<pages.length;i++){
+ const page=pages[i];
+ if(page.scrollHeight>page.clientHeight+2){
+   throw new Error('Obsah strany '+(i+1)+' přesahuje A4.');
+ }
+ const canvas=await html2canvas(page,{scale:2,backgroundColor:'#ffffff',useCORS:true,imageTimeout:10000});
+ if(i>0)pdf.addPage();
+ pdf.addImage(canvas.toDataURL('image/jpeg',0.92),'JPEG',0,0,210,297);
 }
 
 currentPdfBlob=pdf.output('blob');
